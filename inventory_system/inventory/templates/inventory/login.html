@@ -1,0 +1,33 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Login - Inventory System{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-box">
+        <h2>🔐 Login</h2>
+        <p class="login-subtitle">Inventory Management System</p>
+        
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="form-control" required autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+        
+        <div class="login-info">
+            <p><strong>Demo Credentials:</strong></p>
+            <p>Username: <code>admin</code></p>
+            <p>Password: <code>admin123</code></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

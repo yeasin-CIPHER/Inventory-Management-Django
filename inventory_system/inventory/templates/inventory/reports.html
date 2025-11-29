@@ -1,0 +1,103 @@
+{% extends 'inventory/base.html' %}
+
+{% block title %}Reports - Inventory System{% endblock %}
+
+{% block content %}
+<div class="reports-page">
+    <h2>📊 Inventory Reports</h2>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon green">💰</div>
+            <div class="stat-info">
+                <h3>${{ total_value|floatformat:2 }}</h3>
+                <p>Total Inventory Value</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon blue">📦</div>
+            <div class="stat-info">
+                <h3>{{ products.count }}</h3>
+                <p>Total Products</p>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-icon orange">⚠️</div>
+            <div class="stat-info">
+                <h3>{{ low_stock.count }}</h3>
+                <p>Low Stock Products</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Category Summary</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Total Quantity</th>
+                        <th>Total Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td><strong>{{ category.name }}</strong></td>
+                        <td>{{ category.total_products|default:0 }}</td>
+                        <td>${{ category.total_value|default:0|floatformat:2 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>Complete Product Inventory</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>SKU</th>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total Value</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr {% if product.is_low_stock %}class="low-stock-row"{% endif %}>
+                        <td>{{ product.sku }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category|default:"-" }}</td>
+                        <td>{{ product.quantity }}</td>
+                        <td>${{ product.price }}</td>
+                        <td>${{ product.total_value|floatformat:2 }}</td>
+                        <td>
+                            {% if product.is_low_stock %}
+                            <span class="badge badge-danger">Low Stock</span>
+                            {% else %}
+                            <span class="badge badge-success">In Stock</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="5"><strong>TOTAL INVENTORY VALUE</strong></td>
+                        <td colspan="2"><strong>${{ total_value|floatformat:2 }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
